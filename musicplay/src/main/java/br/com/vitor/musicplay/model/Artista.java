@@ -19,7 +19,7 @@ public class Artista {
     @Enumerated(EnumType.STRING)
     private TipoArtista tipo;
 
-    @OneToMany
+    @OneToMany(mappedBy = "artista")
     private List<Musica> musicas = new ArrayList<>();
 
 
