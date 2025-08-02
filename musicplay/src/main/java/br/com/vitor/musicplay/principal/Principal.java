@@ -4,19 +4,24 @@ import br.com.vitor.musicplay.model.Artista;
 import br.com.vitor.musicplay.model.Musica;
 import br.com.vitor.musicplay.model.TipoArtista;
 import br.com.vitor.musicplay.repository.ArtistaRepository;
-import br.com.vitor.musicplay.service.ConsultaChatGPT;
+import br.com.vitor.musicplay.service.ConsultaLastFm;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
+@Component
 public class Principal {
 
     private final ArtistaRepository repositorio;
+    private final ConsultaLastFm consultaAudioDB;
     private Scanner leitura = new Scanner(System.in);
 
-    public Principal(ArtistaRepository repositorio) {
+
+    public Principal(ArtistaRepository repositorio, ConsultaLastFm consultaAudioDB) {
         this.repositorio = repositorio;
+        this.consultaAudioDB = consultaAudioDB;
     }
 
     public void exibeMenu() {
@@ -54,10 +59,10 @@ public class Principal {
 
     private void pesquisarDadosDoArtista() {
         System.out.println("Pesquisar informações sobre qual artista? ");
-        var nome = leitura.nextLine();
-        var resposta = ConsultaChatGPT.obterInformacao(nome);
-        System.out.println(resposta.trim());
+        String nome = leitura.nextLine();
 
+        String resposta = consultaAudioDB.obterInformacao(nome);
+        System.out.println(resposta);
     }
 
     private void buscarMusicasPorArtista() {
